@@ -1,0 +1,19 @@
+/*!
+ * Start Bootstrap - Shop Homepage (https://startbootstrap.com/templates/shop-homepage)
+ * Copyright 2013-2020 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-shop-homepage/blob/master/LICENSE)
+ */
+body {
+  padding-top: 56px;
+}
+::selection{background:#480202;color:#C59447;}
+a{color:black;}
+.carousel-item {
+	height: 350px;
+	overflow: hidden;
+}
+
+.carousel-item img {
+	width: 100%;
+	margin-top: -100px;
+}

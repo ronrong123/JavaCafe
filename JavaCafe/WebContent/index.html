@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+	$(function(){
+		$.ajax({
+			url:'getEmpList', //  /index.html /getEmpList (경로가 같음)
+			type:'get',
+			dataType:'json',
+			success:function(result){
+		/* 		console.log(result); */
+				let data = result;
+				let firstNames = $(data).map(function(i, o){
+					return o.firstName;
+				}).get();
+				let grepNames = $.grep(firstNames, function(o, i){
+					return o.length > 5;
+				}, true);
+				/* grep: 디폴트값이 false라 뒤에 옵션을 true로 적으면 반대의 값을 가져옴 */
+				console.log(grepNames);
+			},
+			error:function(result){
+				console.log(result);
+			}
+		});
+	});
+</script>
+</head>
+<body>
+
+</body>
+</html>
