@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script>
+ 	// ajax
+ 	$.ajax({
+ 		url:'../getMembersByDept',
+ 		dataType:'json',
+ 		success:chartCallBackFunc,
+ 		error:function(reject){
+ 			console.log(reject);
+ 		}
+ 	}); //ajax는 맨마지막에 실행됨
+ 	
+ 	// charts
+ 	  function chartCallBackFunc(result){
+ 		console.log(result);
+			let data = result;
+			let outAry = [];
+			let titleAry = ['Task', 'Hours per Day']
+			outAry.push(titleAry);
+			for(val of data){
+				let inAry = [];
+				for(field in val){
+					console.log(field, val[field]);
+					inAry.push(field);
+					inAry.push(val[field]);
+				}
+				outAry.push(inAry);
+			}
+			console.log(outAry);
+ 		google.charts.load('current', {'packages':['corechart']});
+ 	      google.charts.setOnLoadCallback(drawChart);
+
+ 	      function drawChart() {
+
+ 	        var data = google.visualization.arrayToDataTable(outAry);
+
+ 	        var options = {
+ 	          title: 'My Daily Activities'
+ 	        };
+
+ 	        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+ 	        chart.draw(data, options);
+ 	      } 		
+ 	}
+      
+    </script>
+</head>
+<body>
+	<div id="piechart" style="width: 900px; height: 500px;"></div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script>
+$.ajax({
+	url: '../getTest',
+	dataType:'json',
+	success:chartCallBackFunc,
+	// ajax는 마지막에 실행되기때문에 function을 이용해서 함
+	error:function(reject){
+		console.log(reject);
+	}
+})
+function chartCallBackFunc(result){
+		console.log(result);
+		let data = result;
+		let outAry = [];
+		for(val of data){
+			let inAry = [];
+			for(field in val){
+				console.log(field, val[field]);
+				inAry.push(val[field]);
+			}
+			outAry.push(inAry);
+		}
+		console.log(outAry); 
+		
+		var dataSet = outAry;
+		$(document).ready(function() {
+		    $('#example').DataTable( {
+		        data: dataSet,
+		        columns: [
+		            { title: "empId" },
+		            { title: "firstName" },
+		            { title: "lastName" },
+		            { title: "email" },
+		            { title: "hireDate" },
+		            { title: "salary" }
+		        ]
+		    } );
+		} );
+	}
+</script>
+</head>
+<body>
+<table id="example" class="display" width="100%" style="text-align:center"></table>
+</body>
+</html>

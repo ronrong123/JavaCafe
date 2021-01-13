@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmpDAO {
 	private Connection conn;
@@ -31,6 +33,79 @@ public class EmpDAO {
 			e.printStackTrace();
 		}
 	} // end of 생성자.
+	
+	public void insertSchedule(Schedule sch) {
+		String sql = "insert into calendar values(?,?,?,?)";
+		try {
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setString(1, sch.getTitle());
+			psmt.setString(2, sch.getStartDate());
+			psmt.setString(3, sch.getEndDate());
+			psmt.setString(4, sch.getUrl());
+			int r =psmt.executeUpdate();
+			System.out.println(r + "건 입력되었습니다.");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	public List<Schedule> getScheduleList() {
+		String sql = "select * from calendar";
+		List<Schedule> list = new ArrayList<>();
+		try {
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			ResultSet rs = psmt.executeQuery();
+			while(rs.next()) {
+				Schedule sd = new Schedule();
+				sd.setTitle(rs.getString("title"));
+				sd.setStartDate(rs.getString("start_date"));
+				sd.setEndDate(rs.getString("end_date"));
+				sd.setUrl(rs.getString("url"));
+				list.add(sd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	public Map<String, Integer> getMemberByDept(){
+		String sql ="select department_name, count(*) "
+				+ "from employees e, departments d "
+				+ "where e.department_id = d.department_id "
+				+ "group by department_name";
+		Map<String, Integer> map = new HashMap<>();
+		try {
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			ResultSet rs = psmt.executeQuery();
+			while(rs.next()) {
+				map.put(rs.getString(1), rs.getInt(2));
+				// map: key, value값을 지정하는것
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return map;
+	}
 	public EmployeeVO updateEmp(EmployeeVO vo) {
 		String sql ="update emp_temp set first_name=?, email=?,phone_number=?, hire_date=sysdate, job_id=?  where employee_id=?";
 		int r=0;
